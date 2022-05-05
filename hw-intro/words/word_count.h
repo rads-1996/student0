@@ -70,5 +70,3 @@ void wordcount_insert_ordered(WordCount **wclist, WordCount *elem, bool less(con
 void wordcount_sort(WordCount **wclist, bool less(const WordCount *, const WordCount *));
 
 #endif /* word_count_h */
-
-

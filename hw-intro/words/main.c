@@ -45,9 +45,24 @@ WordCount *word_counts = NULL;
  * Useful functions: fgetc(), isalpha().
  */
 int num_words(FILE* infile) {
-  int num_words = 0;
-
-  return num_words;
+  int count_words = 0;
+  infile = fopen("words.txt","r");
+  if (infile == NULL)
+    return 0;
+  char final_words = 0;
+  do
+    {
+        // Taking input single character at a time
+        char c = fgetc(infile);
+        if (feof(infile))
+            break ;
+        if (isalpha(c) != 0)
+          count_words = count_words + 1;
+        if (c == ' ' || c == '\n' || c == '\0' || c == '\t')
+          final_words = final_words+1;
+    }  while(1);
+  fclose(infile);
+  return final_words;
 }
 
 /*
@@ -57,7 +72,7 @@ int num_words(FILE* infile) {
  * Useful functions: fgetc(), isalpha(), tolower(), add_word().
  */
 void count_words(WordCount **wclist, FILE *infile) {
-}
+  }
 
 /*
  * Comparator to sort list by frequency.
@@ -83,12 +98,12 @@ int main (int argc, char *argv[]) {
 
   // Count Mode (default): outputs the total amount of words counted
   bool count_mode = true;
-  int total_words = 0;
+  int total_words = 5;
 
   // Freq Mode: outputs the frequency of each word
   bool freq_mode = false;
 
-  FILE *infile = NULL;
+  FILE *infile;
 
   // Variables for command line argument parsing
   int i;
@@ -132,6 +147,8 @@ int main (int argc, char *argv[]) {
     // The first file can be found at argv[optind]. The last file can be
     // found at argv[argc-1].
   }
+
+  total_words = num_words(infile);
 
   if (count_mode) {
     printf("The total number of words is: %i\n", total_words);
