@@ -72,6 +72,20 @@ int num_words(FILE* infile) {
  * Useful functions: fgetc(), isalpha(), tolower(), add_word().
  */
 void count_words(WordCount **wclist, FILE *infile) {
+  char str[MAX_WORD_LEN];
+  if (infile == NULL){
+    printf("infile is null");
+    exit(1);
+  }
+  while (fscanf(infile, "%s", str) == 1){
+    for (int i=0;i < strlen(str);i++){
+      str[i] = tolower(str[i]);
+      //printf("%c",str[i]);
+   }
+    //printf("%s\n",str);
+    add_word(wclist,str);
+  }
+  fclose(infile);
   }
 
 /*
@@ -79,6 +93,22 @@ void count_words(WordCount **wclist, FILE *infile) {
  * Useful function: strcmp().
  */
 static bool wordcount_less(const WordCount *wc1, const WordCount *wc2) {
+  const WordCount *i, *j;
+  for (i= wc1,j= wc2; i&&j; i=i->next,j=j->next){
+    if (i->count < j->count)
+      //return (i->count < j->count);
+      return true;
+    if (i->count > j->count)
+      return false;
+    else if ((i->count == j->count)){
+      if (strcmp(i->word,j->word)<0)
+        return true;
+      else if (strcmp(i->word,j->word)>0)
+        return false;
+  //   else 
+  //     return (strcmp(i->word,j->word)==0);
+    }
+  }
   return 0;
 }
 
@@ -95,7 +125,6 @@ static int display_help(void) {
  * Handle command line flags and arguments.
  */
 int main (int argc, char *argv[]) {
-
   // Count Mode (default): outputs the total amount of words counted
   bool count_mode = true;
   int total_words = 5;
@@ -146,10 +175,12 @@ int main (int argc, char *argv[]) {
     // At least one file specified. Useful functions: fopen(), fclose().
     // The first file can be found at argv[optind]. The last file can be
     // found at argv[argc-1].
+    //printf("error");
+    infile = fopen(argv[optind],"r");
   }
-
-  total_words = num_words(infile);
-
+  count_words(&word_counts,infile);
+  //total_words = num_words(infile);
+  
   if (count_mode) {
     printf("The total number of words is: %i\n", total_words);
   } else {

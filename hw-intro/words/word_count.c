@@ -45,7 +45,22 @@ WordCount *find_word(WordCount *wchead, char *word) {
 }
 
 void add_word(WordCount **wclist, char *word) {
-  /* If word is present in word_counts list, increment the count, otw insert with count 1. */
+  // If word is present in word_counts list, increment the count, otw insert with count 1. 
+  WordCount *new_node = (WordCount*) malloc(sizeof(WordCount));
+  WordCount *i;
+  for (i = *wclist;i;i=i->next){
+    if(strcmp(i->word, word)==0)
+    {
+      i->count += 1;
+      return;
+    }
+  }
+  new_node->count = 1;
+  new_node->word = (char*)malloc(64);
+  strcpy(new_node->word,word);
+  //printf("%s\n",new_node->word);
+  new_node->next = *wclist;
+  *wclist = new_node;
 }
 
 void fprint_words(WordCount *wchead, FILE *ofile) {
